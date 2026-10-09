@@ -1,0 +1,16 @@
+name: "Hantami"
+version: "1.0.0"
+main: "com.hantami.HantamiPlugin"
+api-version: "1.20"
+description: "Hantami mannequin folk who roam build houses and form villages"
+author: "Akitsalsiixu"
+commands:
+  hantami:
+    description: "Manage the Hantami folk"
+    usage: "/hantami help - show Hantami commands"
+    permission: "hantami.admin"
+    permission-message: "Only the village elders may call this"
+permissions:
+  hantami.admin:
+    description: "Allow Hantami admin actions"
+    default: op

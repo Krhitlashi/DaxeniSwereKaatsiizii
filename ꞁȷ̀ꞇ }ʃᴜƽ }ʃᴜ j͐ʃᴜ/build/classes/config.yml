@@ -1,0 +1,45 @@
+# Nala agordo 📃
+# ==============
+
+# Nala agordo 📃
+# ==============
+
+# Custom worlds ensured on start in minecraft namespace
+# Each entry needs nomo plus optional medio semo generilo datumpako rimedpako
+# medio is NORMAL NETHER THE_END or FLAT
+# semo is a number or text like vanilla empty means random
+# generilo empty is vanilla or one installed plugin name for that world only
+# datumpako is a list of zip or folder names from plugins Nala datumpako
+# rimedpako is a list of http links or zip names from plugins Nala rimedpako
+# Local zips serve over http on the haveno below and players fetch them on travel
+# Datapacks are level wide in vanilla so use one pack set per level
+# Example Terraform world keeps main world vanilla
+# - nomo: sovagxejo
+#   medio: NORMAL
+#   semo: 0
+#   generilo: TerraformGenerator
+#   datumpako: []
+#   rimedpako: []
+# Add an entry then restart or run /nala s2tosax
+mondoj:
+- nomo: kaaliqlaakaarace
+  medio: NORMAL
+  semo: 2051533416
+  generilo: TerraformGenerator
+  datumpako: []
+  rimedpako: []
+
+# Host for local rimedpako links empty means auto LAN IP
+rimedpako-gastiganto: ""
+
+# Port for local rimedpako links ( 8192 equals 0o20000 )
+rimedpako-haveno: 8192
+
+# Show nether and end in travel menu ( true or false )
+montri-nether-end: false
+
+# Cooldown in ticks between portal triggers ( 64 equals 0o100 )
+malstreco: 64
+
+# Maximum portal interior size to scan ( 12 equals 0o14 )
+maks-grando: 12

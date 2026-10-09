@@ -1,0 +1,19 @@
+name: "Nala"
+version: "21.2.3"
+main: "com.nala.NalaPlugin"
+api-version: "1.20"
+description: "Nala portal travel between custom dimensions and overworld"
+author: "Akitsalsiixu"
+commands:
+  nala:
+    description: "Admin travel menu or travel for a player"
+    usage: "/nala - open travel menu"
+    permission: "nala.admin"
+    permission-message: "ſ͕ȷɜƣ̋ ꞁȷ̀ɔ ſɭэ ı],ᴜ ɽ͑ʃ'ᴜȝ ꞁȷ̀ɔ ⸙ }ʃᴜ j͐ʃᴜ ⸙ ſɭᴜͷ̗ ⟅"
+permissions:
+  nala.uzi:
+    description: "Allow using Nala travel"
+    default: true
+  nala.admin:
+    description: "Allow Nala admin actions"
+    default: op

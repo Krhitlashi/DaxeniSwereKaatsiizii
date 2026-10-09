@@ -1,0 +1,39 @@
+# Hantami agordo 📃
+# ==============
+
+# Mondo kie la Hantami loĝas kaj konstruas
+mondo: kaaliqlaakaarace
+
+# Celo loĝantaro da naturaj Hantami en la mondo ( 1 egalas 0o1 )
+celo: 1
+
+# Absoluta limo por naturaj Hantami ( 1 egalas 0o1 )
+maksimuma-popolo: 1
+
+# Maksimuma nask radiuso en blokoj; naskoj komenciĝas almenaŭ 64 blokojn for ( 384 egalas 0o600 )
+nask-radiuso: 384
+
+# Maksimuma serĉa radiuso por loka ligno ( 12 egalas 0o14 )
+ligno-radiuso: 12
+
+# Soleca sojlo en tike antaŭ ol sola Hantami atakas ( 1200 egalas 0o2260 )
+# Tio daŭras proksimume 2 qe
+soleca-tikoj: 1200
+
+# Radiuso por vidi solan ludanton ( 16 egalas 0o20 )
+sola-vido: 16
+
+# Radiuso por vidi alian Hantami ( 32 egalas 0o40 )
+samideano-vido: 32
+
+# Grupo radiuso por vilaĝa formado ( 48 egalas 0o60 )
+grup-radiuso: 48
+
+# Minimumaj Hantami por formi vilaĝon ( 2 egalas 0o2 )
+vila-minimo: 2
+
+# Ataka damaĝo kontraŭ ludantoj ( 4 egalas 0o4 )
+ataku-damagxo: 4.0
+
+# Ĉu mortigo faligas totemon de nemorto ( true aŭ false )
+totemo-falo: true

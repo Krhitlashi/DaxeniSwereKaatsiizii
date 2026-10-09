@@ -1,0 +1,23 @@
+# ſɭэ ſᶘɔ agordo 📃
+# ==============
+
+# តំបន់ពេលវេលាសម្រាប់ត្រា ( UTC-08:00 ជាអចិន្ត្រៃយ៍ )
+timezone: "-08:00"
+
+# សិទ្ធិសម្រាប់រៀបចំអ្នកគ្រប់គ្រង ( អ្នកលេងដែលមានសិទ្ធិនេះ ឬ OP នឹងដាក់ក្នុងថត adminoj )
+admin-permission: "kaatse.admin"
+
+# ធាតុដែលត្រូវកត់ត្រា ( true ឬ false )
+log-chat: true
+log-commands: true
+log-join-quit: true
+log-console: true
+log-subject-marker: false
+# ជម្រើសមេ សម្រាប់កត់ត្រាព្រឹត្តិការណ៍ម៉ាស៊ីនមេ
+log-server-events: true
+# ជម្រើសនីមួយៗសម្រាប់ព្រឹត្តិការណ៍ម៉ាស៊ីនមេ ( ត្រូវការបើក log-server-events )
+log-deaths: true
+log-kicks: true
+log-advancements: true
+log-server-start-stop: false
+log-world-saves: false

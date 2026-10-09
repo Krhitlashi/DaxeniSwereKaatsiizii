@@ -1,0 +1,51 @@
+types:
+  chat: "ſɭэ ſᶘɔ"
+  command: "ſɭᴜc̗ ɭʃᴜ ſɭɜ ʃɔ j͑ʃᴜꞇ"
+  join: "ſɭw ſ̀ȷᴜ"
+  leave: "j͑ʃwc̗ ɭʃw"
+  death: "ſɟᴜ ŋᷠɹ"
+  kick: "ſɭɹ ı],ᴜ }ʃɔ"
+  advancement: "ſ͕ɭw ŋᷠw"
+  console: "ſןɔ ſɭʞꞇ"
+  server-start: "j͑ʃᴜ ı],ɔ"
+  server-stop: "ſ̀ȷᴜ ſɭᴜƽ"
+  world-save: "j͑ʃ'ɔ ſ̀ȷᴜȝ"
+
+names:
+  server: "}ʃᴜ j͐ʃᴜ ֭ſɭᴜ ɭʃɔ j͑ʃᴜꞇ"
+  console: "ꞁȷ̀ᴜ ɽ͑ʃ'ᴜ ſᶘɔⅎ"
+  unknown: "ſɭɔ ſ͕ȷᴜ"
+
+formats:
+  timestamp: "[ %year% %month% %day% - %hour% %minute% %second% ]"
+  last-activity: "%year% %month% %day% - %hour% %minute% %second%"
+  log-line: "%timestamp% [ %type% ] %message%"
+  player-message: "⟨ %player% ⟩ %message%"
+
+headers:
+  player: "⟨ ɭʃɜȝ j͑ʃw ſɭʞɹȝ ꞁȷ̀ᴜꞇ ⟩ ꞁȷ̀ᴜ ⸙ %player% ⸙ ſɭᴜͷ̗"
+  console: "⟨ ɭʃɜȝ j͑ʃw ſɭʞɹȝ ꞁȷ̀ᴜꞇ ⟩ ꞁȷ̀ɔ ⸙ %console% ⸙ ſɭᴜͷ̗"
+  uuid: "⟨ ɽ͑ʃ'w j͑ʃ'ᴜ ⟩ %uuid%"
+  console-identity: "⟨ ɽ͑ʃ'w j͑ʃ'ᴜ ⟩ ꞁȷ̀ɔ ⸙ %console% ⸙ ſɭᴜͷ̗"
+  last-activity: "⟨ ſ̀ȷᴜ ſɭᴜƽ ꞁȷ̀ᴜꞇ ʌ ſɭ,ɔ }ʃꞇ ⟩ %timestamp%"
+  address: "⟨ ɽ͑ʃ'w j͑ʃ'ᴜ ⟩ %address%"
+  end: "---"
+  managed:
+    - "player"
+    - "console"
+    - "uuid"
+    - "console-identity"
+    - "last-activity"
+    - "address"
+
+sentences:
+  player-command: "ſɭɔ j͑ʃ'ɔ ʌ ꞁȷ̀ɔ ⸙ %command% ⸙ ſɭᴜͷ̗ ʌ ⺓ ʌ ꞁȷ̀ᴜ ⸙ %player% ⸙ ſɭᴜͷ̗ ⟅"
+  console-command: "ſɭɔ j͑ʃ'ɔ ʌ ꞁȷ̀ɔ ⸙ %command% ⸙ ſɭᴜͷ̗ ʌ ⺓ ʌ ꞁȷ̀ɔ ⸙ %console% ⸙ ſɭᴜͷ̗ ⟅"
+  player-join: "ſɭw ſ̀ȷᴜ ʌ ֭ſɭᴜ ɭʃɔ ʌ ⺓ ʌ ꞁȷ̀ᴜ ⸙ %player% ⸙ ſɭᴜͷ̗ ⟅"
+  player-leave: "j͑ʃwc̗ ɭʃw ʌ ֭ſɭᴜ ɭʃɔ ʌ ⺓ ʌ ꞁȷ̀ᴜ ⸙ %player% ⸙ ſɭᴜͷ̗ ⟅"
+  player-death: "ſɟᴜ ŋᷠɹ ʌ ᶅſэ ʌ ⺓ ʌ ꞁȷ̀ᴜ ⸙ %player% ⸙ ſɭᴜͷ̗ ⟅"
+  player-kick: "ſɭɹ ı],ᴜ }ʃɔ ʌ ᶅſэ ʌ ꞁȷ̀ᴜ ⸙ %player% ⸙ ſɭᴜͷ̗ ʌ ⺓ ʌ ꞁȷ̀ɔ ⸙ %server% ⸙ ſɭᴜͷ̗ ⟅"
+  player-advancement: "ſ͕ɭw ŋᷠw ʌ ᶅſэ ʌ ꞁȷ̀ɔ ⸙ %advancement% ⸙ ſɭᴜͷ̗ ʌ ⺓ ʌ ꞁȷ̀ᴜ ⸙ %player% ⸙ ſɭᴜͷ̗ ⟅"
+  server-start: "j͑ʃᴜ ı],ɔ ʌ ᶅſэ ʌ ⺓ ʌ ꞁȷ̀ɔ ⸙ %server% ⸙ ſɭᴜͷ̗ ⟅"
+  server-stop: "ſ̀ȷᴜ ſɭᴜƽ ʌ ᶅſэ ʌ ⺓ ʌ ꞁȷ̀ɔ ⸙ %server% ⸙ ſɭᴜͷ̗ ⟅"
+  world-save: "j͑ʃ'ɔ ſ̀ȷᴜȝ ʌ ᶅſэ ʌ ꞁȷ̀ɔ ⸙ %world% ⸙ ſɭᴜͷ̗ ʌ ⺓ ʌ ꞁȷ̀ɔ ⸙ %server% ⸙ ſɭᴜͷ̗ ⟅"
