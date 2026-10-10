@@ -16,7 +16,7 @@ When Hantami drift near each other they congregate. A group forms a village with
 
 ## Kolero ⚔️
 
-Hantami are calm until provoked. Attack one and it fights back bare handed with a spooky aggro display. Leave one Hantami alone with a player and no other Hantami nearby for more than 2 qe and it also turns hostile. In aggro mode the mob spins its head, jitters, glows, and shows a vertical split of dark particles across its face that opens and closes. A true vertical model split needs a resource pack, so this particle jaw plus spin is the pack free haunting.
+Hantami are calm until provoked. Attack one and it fights back bare handed with a spooky aggro display. Leave one Hantami alone with a player and no other Hantami nearby for more than 2 qe and it also turns hostile. A lone player with no other players far around gets stalked and attacked after a short ambush wait. At night one in four Hantami falls into nightmare rage with high jumps, spinning head, ash, heartbeat, and a darkness aura, and dawn always ends it. In aggro mode the mob spins its head, jitters, glows, and shows a vertical split of dark particles across its face that opens and closes. A true vertical model split needs a resource pack, so this particle jaw plus spin is the pack free haunting.
 
 Killing a Hantami drops a totem of undying.
 

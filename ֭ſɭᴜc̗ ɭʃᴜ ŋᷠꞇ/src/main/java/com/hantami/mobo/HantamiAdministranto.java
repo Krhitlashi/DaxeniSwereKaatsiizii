@@ -60,6 +60,11 @@ public class HantamiAdministranto {
         Location lastLoko = null;
         int senmova = 0;
         double flanka = 0.0D;
+        UUID predanto = null;
+        int embusko = 0;
+        boolean koŝmaro = false;
+        double saltaAlteco = 0.42D;
+        Location hejmo = null;
     }
 
     private final HantamiPlugin kromprogramo;
@@ -76,6 +81,7 @@ public class HantamiAdministranto {
     private int taskoId = -1;
     private int movTaskoId = -1;
     private int tiklo = 0;
+    private boolean estisNokto = false;
 
     public HantamiAdministranto(HantamiPlugin kromprogramo) {
         this.kromprogramo = kromprogramo;
@@ -275,6 +281,7 @@ public class HantamiAdministranto {
                 bremsi(hantamo);
                 continue;
             }
+            double distHoriz = direkto.length();
             direkto.normalize();
             stato.senmova++;
             if ( stato.senmova >= 10 ) { // 0o12
@@ -296,15 +303,31 @@ public class HantamiAdministranto {
                 Location antaŭe = tie.clone().add(direkto);
                 boolean barita = ! antaŭe.getBlock().isPassable() || ! antaŭe.clone().add(0.0D, 1.0D, 0.0D).getBlock().isPassable();
                 if ( barita ) {
-                    y = 0.42D;
+                    y = stato.saltaAlteco;
+                    boolean maldekstraLibera = vojoLibera(tie.clone().add(flanken));
+                    boolean dekstraLibera = vojoLibera(tie.clone().subtract(flanken));
+                    if ( maldekstraLibera && ! dekstraLibera ) {
+                        stato.flanka = 0.9D;
+                    } else if ( dekstraLibera && ! maldekstraLibera ) {
+                        stato.flanka = -0.9D;
+                    } else if ( maldekstraLibera && dekstraLibera && stato.flanka == 0.0D ) {
+                        stato.flanka = hazardo.nextBoolean() ? 0.9D : -0.9D;
+                    }
+                    movo.add(flanken.multiply(stato.flanka * stato.movRapido));
+                } else if ( celo.getY() - tie.getY() > 1.2D && distHoriz > 1.0D ) {
+                    y = stato.saltaAlteco;
                 } else if ( y < -0.2D ) {
                     y = -0.1D;
                 } else {
                     y = 0.0D;
                 }
+                if ( ! barita && danĝeraAntaŭe(antaŭe) ) {
+                    movo.multiply(0.25D);
+                    stato.flanka = ( hantamo.getWorld().getFullTime() % 40L < 20L ) ? 0.8D : -0.8D; // 0o50 0o24
+                }
             }
             hantamo.setVelocity(new Vector(movo.getX(), y, movo.getZ()));
-            if ( stato.spinFazo <= 0 ) {
+            if ( stato.spinFazo <= 0 && ! stato.koŝmaro ) {
                 float dezirata = (float) Math.toDegrees(Math.atan2(-plena.getX(), plena.getZ()));
                 float delta = envolvi(dezirata - tie.getYaw());
                 float paŝo = Math.max(-20.0F, Math.min(20.0F, delta)); // 0o24
@@ -314,6 +337,33 @@ public class HantamiAdministranto {
                 hantamo.setRotation(tie.getYaw() + paŝo, inklino);
             }
         }
+    }
+
+    /* ប្រាប់ថាតើផ្លូវឆ្លងកាត់បានឬអត់
+        @param loko ( Location , មិនមែន null ) - ចំណុចត្រូវពិនិត្យ
+        @returns True នៅពេលឆ្លងកាត់បាន */
+    private boolean vojoLibera(Location loko) {
+        return loko.getBlock().isPassable() && loko.clone().add(0.0D, 1.0D, 0.0D).getBlock().isPassable();
+    }
+
+    /* ប្រាប់ថាតើដីខាងមុខមានគ្រោះថ្នាក់ឬជ្រោះឬអត់
+        @param antaŭe ( Location , មិនមែន null ) - ចំណុចខាងមុខ
+        @returns True នៅពេលគ្រោះថ្នាក់ */
+    private boolean danĝeraAntaŭe(Location antaŭe) {
+        Material tipo = antaŭe.getBlock().getType();
+        if ( tipo == Material.LAVA || tipo == Material.FIRE || tipo == Material.SOUL_FIRE || tipo == Material.MAGMA_BLOCK || tipo == Material.CAMPFIRE || tipo == Material.CACTUS ) {
+            return true;
+        }
+        for ( int i = 1; i <= 4; i++ ) { // 0o1 ĝis 0o4
+            Material sube = antaŭe.clone().add(0.0D, -i, 0.0D).getBlock().getType();
+            if ( sube == Material.LAVA ) {
+                return true;
+            }
+            if ( sube.isSolid() && sube != Material.CACTUS ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /* បន្ថយល្បឿនតុក្កតាធម្មជាតិដោយមិនប៉ះទំនាញ
@@ -367,6 +417,7 @@ public class HantamiAdministranto {
         for ( UUID mortinto : mortintoj ) {
             statoj.remove(mortinto);
         }
+        kontroliNokton(mondo);
         if ( ! projektoj.isEmpty() ) {
             java.util.Iterator<KonstruProjekto> iteratoro = projektoj.iterator();
             while ( iteratoro.hasNext() ) {
@@ -395,6 +446,43 @@ public class HantamiAdministranto {
         if ( tiklo % 150 == 0 ) { // 0o226
             konservi();
         }
+    }
+
+    /* ប្រាប់ថាតើពិភពលោកយប់ឬអត់
+        @param mondo ( World , មិនមែន null ) - ពិភពលោកត្រូវពិនិត្យ
+        @returns True នៅពេលយប់ */
+    private boolean estasNokto(World mondo) {
+        long tempo = mondo.getTime() % 24000L; // 0o57000
+        return tempo >= 13000L && tempo <= 23000L; // 0o31250 ĝis 0o54730
+    }
+
+    /* រមៀលសុបិន្តអាក្រក់ពេលយប់ធ្លាក់និងរំងាប់ពេលថ្ងៃរះ
+        @param mondo ( World , មិនមែន null ) - Cela mondo
+        @returns គ្មាន */
+    private void kontroliNokton(World mondo) {
+        boolean nokto = estasNokto(mondo);
+        if ( nokto && ! estisNokto ) {
+            for ( Map.Entry<UUID, Stato> paro : statoj.entrySet() ) {
+                Entity ento = Bukkit.getEntity(paro.getKey());
+                if ( ento instanceof Mannequin hantamo && ! hantamo.isDead() && hantamo.isValid() && hantamo.getWorld().equals(mondo) ) {
+                    if ( hazardo.nextInt(4) == 0 ) { // 0o4
+                        paro.getValue().koŝmaro = true;
+                    }
+                }
+            }
+        }
+        if ( ! nokto && estisNokto ) {
+            for ( Map.Entry<UUID, Stato> paro : statoj.entrySet() ) {
+                Entity ento = Bukkit.getEntity(paro.getKey());
+                if ( ento instanceof Mannequin hantamo && ! hantamo.isDead() && hantamo.isValid() ) {
+                    if ( paro.getValue().koŝmaro ) {
+                        paro.getValue().koŝmaro = false;
+                        pacigi(hantamo, paro.getValue());
+                    }
+                }
+            }
+        }
+        estisNokto = nokto;
     }
 
     // ⟪ Popolo 📃 ⟫
@@ -600,6 +688,9 @@ public class HantamiAdministranto {
         Stato stato = novaStato();
         statoj.put(hantamo.getUniqueId(), stato);
         konservi();
+        if ( estasNokto(mondo) && hazardo.nextInt(4) == 0 ) { // 0o4
+            stato.koŝmaro = true;
+        }
         pacigi(hantamo, stato);
         kromprogramo.getLogger().info(Mesagoj.INFO_NASKITA);
         return hantamo;
@@ -665,6 +756,29 @@ public class HantamiAdministranto {
         if ( stato.atakoKd > 0 ) {
             stato.atakoKd -= 4; // 0o4
         }
+        if ( stato.koŝmaro ) {
+            if ( ! estasNokto(hantamo.getWorld()) ) {
+                stato.koŝmaro = false;
+                pacigi(hantamo, stato);
+                return;
+            }
+            Player predo = plejProksimaAtakebla(hantamo, 48.0D); // 0o60
+            if ( predo != null ) {
+                stato.celo = predo.getUniqueId();
+                stato.movCelo = predo.getLocation();
+                stato.movRapido = 0.30D;
+                stato.saltaAlteco = 0.9D;
+                hantamo.setGlowing(true);
+                ĉasi(hantamo, stato, predo);
+                koŝmari(hantamo, stato);
+            } else {
+                stato.celo = null;
+                stato.saltaAlteco = 0.9D;
+                vagi(hantamo, stato);
+                koŝmari(hantamo, stato);
+            }
+            return;
+        }
         Player celulo = null;
         if ( stato.celo != null ) {
             Entity ento = Bukkit.getEntity(stato.celo);
@@ -691,6 +805,7 @@ public class HantamiAdministranto {
             return;
         }
         rigardiSolecon(hantamo, stato);
+        rigardiPredon(hantamo, stato);
         if ( stato.celo != null ) {
             Entity ento = Bukkit.getEntity(stato.celo);
             if ( ento instanceof Player ludanto ) {
@@ -705,7 +820,7 @@ public class HantamiAdministranto {
         stato.konstruKd -= 4; // 0o4
         if ( stato.konstruKd <= 0 ) {
             stato.konstruKd = 2400 + hazardo.nextInt(4800); // 0o4540 ĝis 0o11300
-            proviKonstrui(hantamo);
+            proviKonstrui(hantamo, stato);
         }
     }
 
@@ -737,6 +852,77 @@ public class HantamiAdministranto {
         }
     }
 
+    /* រង់ចាំវាយអ្នកលេងឯកាដែលគ្មានអ្នកផ្សេងនៅជិត
+        @param hantamo ( Mannequin , មិនមែន null ) - តុក្កតា
+        @param stato ( Stato , មិនមែន null ) - ស្ថានភាពរបស់វា
+        @returns គ្មាន */
+    private void rigardiPredon(Mannequin hantamo, Stato stato) {
+        if ( stato.celo != null ) {
+            return;
+        }
+        Location tie = hantamo.getLocation();
+        Player sola = null;
+        for ( Entity ento : hantamo.getNearbyEntities(agordo.solaVido(), 8.0D, agordo.solaVido()) ) { // 0o10
+            if ( ento instanceof Player ludanto && ! ludanto.isDead() && ludanto.getGameMode() != GameMode.SPECTATOR ) {
+                if ( sola != null ) {
+                    stato.predanto = null;
+                    stato.embusko = 0;
+                    return;
+                }
+                sola = ludanto;
+            }
+        }
+        if ( sola == null ) {
+            stato.predanto = null;
+            stato.embusko = 0;
+            return;
+        }
+        double malproksimo2 = agordo.solaLudantoVido() * agordo.solaLudantoVido();
+        for ( Player alia : hantamo.getWorld().getPlayers() ) {
+            if ( alia.equals(sola) || alia.isDead() || alia.getGameMode() == GameMode.SPECTATOR ) {
+                continue;
+            }
+            if ( alia.getLocation().distanceSquared(tie) < malproksimo2 ) {
+                stato.predanto = null;
+                stato.embusko = 0;
+                return;
+            }
+        }
+        if ( ! sola.getUniqueId().equals(stato.predanto) ) {
+            stato.predanto = sola.getUniqueId();
+            stato.embusko = 4; // 0o4
+        } else {
+            stato.embusko += 4; // 0o4
+        }
+        if ( stato.embusko >= agordo.embuskoTikoj() ) {
+            ekkoleri(hantamo, stato, sola);
+        }
+    }
+
+    /* បំភ័យពេលយប់ដោយបង្វិលក្បាលយឺត ផេះ និងចង្វាក់បេះដូង
+        @param hantamo ( Mannequin , មិនមែន null ) - តុក្កតា
+        @param stato ( Stato , មិនមែន null ) - ស្ថានភាពរបស់វា
+        @returns គ្មាន */
+    private void koŝmari(Mannequin hantamo, Stato stato) {
+        stato.animFazo++;
+        hantamo.setRotation(hantamo.getLocation().getYaw() + 12.0F, 0.0F); // 0o14
+        Location okulo = hantamo.getEyeLocation();
+        World mondo = hantamo.getWorld();
+        mondo.spawnParticle(Particle.ASH, okulo, 6, 0.5D, 0.8D, 0.5D, 0.02D); // 0o6
+        mondo.spawnParticle(Particle.LARGE_SMOKE, okulo, 3, 0.4D, 0.6D, 0.4D, 0.01D); // 0o3
+        for ( Entity ento : hantamo.getNearbyEntities(12.0D, 8.0D, 12.0D) ) { // 0o14 0o10
+            if ( ento instanceof Player ludanto && ! ludanto.isDead() && ludanto.getGameMode() != GameMode.SPECTATOR ) {
+                ludanto.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 80, 0, false, false)); // 0o120
+            }
+        }
+        if ( stato.animFazo % 40 == 0 ) { // 0o50
+            mondo.playSound(hantamo.getLocation(), Sound.ENTITY_WARDEN_HEARTBEAT, 1.0F, 0.7F);
+        }
+        if ( stato.animFazo % 100 == 0 ) { // 0o144
+            mondo.playSound(hantamo.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 0.8F, 0.4F);
+        }
+    }
+
     /* សន្យាតាមអ្នកលេងមានរូបគួរឱ្យខ្លាច
         @param hantamo ( Mannequin , មិនមែន null ) - តុក្កតា
         @param stato ( Stato , មិនមែន null ) - ស្ថានភាពរបស់វា
@@ -763,6 +949,9 @@ public class HantamiAdministranto {
         stato.spinFazo = 0;
         stato.movCelo = null;
         stato.flanka = 0.0D;
+        stato.predanto = null;
+        stato.embusko = 0;
+        stato.saltaAlteco = 0.42D;
         hantamo.setGlowing(false);
         hantamo.customName(null);
         hantamo.setCustomNameVisible(false);
@@ -868,7 +1057,7 @@ public class HantamiAdministranto {
         long nun = hantamo.getWorld().getFullTime();
         Location tie = hantamo.getLocation();
         if ( stato.vaga == null || nun > stato.vagaFino || stato.vaga.distanceSquared(tie) < 4.0D ) { // 0o4
-            stato.vaga = elektiVagon(hantamo);
+            stato.vaga = elektiVagon(hantamo, stato);
             stato.vagaFino = nun + 200L + hazardo.nextInt(400); // 0o310 ĝis 0o1070
             return;
         }
@@ -876,10 +1065,11 @@ public class HantamiAdministranto {
         stato.movRapido = 0.15D;
     }
 
-    /* ជ្រើសរើសគោលដៅដើរលេងមានទាញទៅភូមិជិត
+    /* ជ្រើសរើសគោលដៅដើរលេងមានទាញទៅភូមិជិតឬផ្ទះដែលទទួលស្គាល់
         @param hantamo ( Mannequin , មិនមែន null ) - តុក្កតា
+        @param stato ( Stato , មិនមែន null ) - ស្ថានភាពរបស់វា
         @returns គោលដៅដើរលេង */
-    private Location elektiVagon(Mannequin hantamo) {
+    private Location elektiVagon(Mannequin hantamo, Stato stato) {
         Location tie = hantamo.getLocation();
         Location plejProksima = null;
         double plejDistanco2 = Double.MAX_VALUE;
@@ -894,8 +1084,16 @@ public class HantamiAdministranto {
             }
         }
         Location bazo = tie;
-        if ( plejProksima != null && plejDistanco2 < 4096.0D ) { // 0o10000
+        double plejBazo2 = 4096.0D; // 0o10000
+        if ( plejProksima != null && plejDistanco2 < plejBazo2 ) {
             bazo = plejProksima;
+            plejBazo2 = plejDistanco2;
+        }
+        if ( stato.hejmo != null && stato.hejmo.getWorld().equals(tie.getWorld()) ) {
+            double hejmo2 = stato.hejmo.distanceSquared(tie);
+            if ( hejmo2 < plejBazo2 && hejmo2 < 9216.0D ) { // 0o22000
+                bazo = stato.hejmo;
+            }
         }
         for ( int provo = 0; provo < 6; provo++ ) { // 0o6
             double angulo = hazardo.nextDouble() * Math.PI * 2.0D;
@@ -929,8 +1127,9 @@ public class HantamiAdministranto {
 
     /* ព្យាយាមចាប់ផ្តើមគម្រោងសង់ផ្ទះបន្តិចម្តងៗនៅទីតាំងបច្ចុប្បន្ន
         @param hantamo ( Mannequin , មិនមែន null ) - អ្នកសាងសង់
+        @param stato ( Stato , មិនមែន null ) - ស្ថានភាពរបស់វា
         @returns គ្មាន */
-    private void proviKonstrui(Mannequin hantamo) {
+    private void proviKonstrui(Mannequin hantamo, Stato stato) {
         World mondo = hantamo.getWorld();
         Location tie = hantamo.getLocation();
         if ( projektoj.size() >= 3 ) { // 0o3
@@ -943,6 +1142,22 @@ public class HantamiAdministranto {
             if ( projekto.ejo().getWorld().equals(mondo) && projekto.ejo().distanceSquared(tie) < 100.0D ) { // 0o144
                 return;
             }
+        }
+        Location adoptita = null;
+        double adoptita2 = 576.0D; // 0o1100
+        for ( Location konata : domoj ) {
+            if ( ! konata.getWorld().equals(mondo) ) {
+                continue;
+            }
+            double distanco2 = konata.distanceSquared(tie);
+            if ( distanco2 < adoptita2 ) {
+                adoptita2 = distanco2;
+                adoptita = konata;
+            }
+        }
+        if ( adoptita != null ) {
+            stato.hejmo = adoptita;
+            return;
         }
         for ( Location konata : domoj ) {
             if ( konata.getWorld().equals(mondo) && konata.distanceSquared(tie) < 100.0D ) { // 0o144
@@ -993,7 +1208,7 @@ public class HantamiAdministranto {
             if ( mezo == null ) {
                 continue;
             }
-            if ( proksimaVilaĝo(mezo, 16.0D) ) { // 0o20
+            if ( proksimaVilaĝo(mezo, agordo.grupRadiuso()) ) {
                 continue;
             }
             if ( HantamiKonstruanto.fajroProksimas(mondo, mezo, 12) ) { // 0o14

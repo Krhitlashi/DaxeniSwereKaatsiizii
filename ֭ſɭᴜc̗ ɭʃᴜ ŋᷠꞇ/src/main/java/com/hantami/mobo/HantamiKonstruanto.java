@@ -281,6 +281,22 @@ public final class HantamiKonstruanto {
         if ( maks - min > 3 ) { // 0o3
             return null;
         }
+        y0 = maks;
+        int minTuta = maks;
+        for ( int x = x0; x <= x1; x++ ) {
+            for ( int z = z0; z <= z1; z++ ) {
+                int h = mondo.getHighestBlockYAt(x, z);
+                if ( h > y0 ) {
+                    y0 = h;
+                }
+                if ( h < minTuta ) {
+                    minTuta = h;
+                }
+            }
+        }
+        if ( y0 - minTuta > 4 ) { // 0o4
+            return null;
+        }
         Location mezo = new Location(mondo, ( x0 + x1 ) / 2.0D, y0, ( z0 + z1 ) / 2.0D);
         for ( Location konata : domoj ) {
             if ( ! konata.getWorld().equals(mondo) ) {
@@ -299,7 +315,7 @@ public final class HantamiKonstruanto {
         int pordoZ = ( z0 + z1 ) / 2;
         for ( int x = x0; x <= x1; x++ ) {
             for ( int z = z0; z <= z1; z++ ) {
-                for ( int y = y0; y <= y0 + alto + 1; y++ ) {
+                for ( int y = y0 + 1; y <= y0 + alto + 1; y++ ) {
                     Block bloko = mondo.getBlockAt(x, y, z);
                     if ( bloko.getType() == Material.BEDROCK ) {
                         continue;
@@ -309,6 +325,17 @@ public final class HantamiKonstruanto {
             }
         }
         List<PlanoBloko> vico = new ArrayList<>();
+        for ( int x = x0; x <= x1; x++ ) {
+            for ( int z = z0; z <= z1; z++ ) {
+                for ( int y = y0 - 1; y >= y0 - 5 && y >= mondo.getMinHeight(); y-- ) { // 0o5
+                    Block sube = mondo.getBlockAt(x, y, z);
+                    if ( sube.getType().isSolid() ) {
+                        break;
+                    }
+                    vico.add(new PlanoBloko(x, y, z, tabulo, false));
+                }
+            }
+        }
         for ( int x = x0; x <= x1; x++ ) {
             for ( int z = z0; z <= z1; z++ ) {
                 vico.add(new PlanoBloko(x, y0, z, tabulo, false));
@@ -323,12 +350,12 @@ public final class HantamiKonstruanto {
         for ( int y = y0 + 1; y <= y0 + alto; y++ ) {
             boolean supro = y == y0 + alto;
             for ( int x = x0 + 1; x <= x1 - 1; x++ ) {
-                aldoniMurBlokon(vico, x, y, z0, supro ? ŝtuparo : tabulo, supro, BlockFace.NORTH, pordoFlanko, 0, x, pordoX, y0);
-                aldoniMurBlokon(vico, x, y, z1, supro ? ŝtuparo : tabulo, supro, BlockFace.SOUTH, pordoFlanko, 1, x, pordoX, y0);
+                aldoniMurBlokon(vico, x, y, z0, supro ? ŝtuparo : tabulo, supro, BlockFace.SOUTH, pordoFlanko, 0, x, pordoX, y0);
+                aldoniMurBlokon(vico, x, y, z1, supro ? ŝtuparo : tabulo, supro, BlockFace.NORTH, pordoFlanko, 1, x, pordoX, y0);
             }
             for ( int z = z0 + 1; z <= z1 - 1; z++ ) {
-                aldoniMurBlokon(vico, x0, y, z, supro ? ŝtuparo : tabulo, supro, BlockFace.EAST, pordoFlanko, 2, z, pordoZ, y0);
-                aldoniMurBlokon(vico, x1, y, z, supro ? ŝtuparo : tabulo, supro, BlockFace.WEST, pordoFlanko, 3, z, pordoZ, y0);
+                aldoniMurBlokon(vico, x0, y, z, supro ? ŝtuparo : tabulo, supro, BlockFace.WEST, pordoFlanko, 2, z, pordoZ, y0);
+                aldoniMurBlokon(vico, x1, y, z, supro ? ŝtuparo : tabulo, supro, BlockFace.EAST, pordoFlanko, 3, z, pordoZ, y0);
             }
         }
         for ( int x = x0 + 1; x <= x1 - 1; x++ ) {

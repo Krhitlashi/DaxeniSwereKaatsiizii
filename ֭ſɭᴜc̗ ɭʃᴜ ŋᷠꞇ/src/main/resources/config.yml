@@ -23,6 +23,12 @@ soleca-tikoj: 1200
 # Radiuso por vidi solan ludanton ( 16 egalas 0o20 )
 sola-vido: 16
 
+# Radiuso ĉirkaŭ Hantami kie neniu alia ludanto rajtas esti por predanto ( 64 egalas 0o100 )
+sola-ludanto-vido: 64.0
+
+# Kasatendo en tikoj antaŭ ol predanto atakas solecan ludanton ( 100 egalas 0o144 )
+embusko-tikoj: 100
+
 # Radiuso por vidi alian Hantami ( 32 egalas 0o40 )
 samideano-vido: 32
 

@@ -20,6 +20,8 @@ public class Agordo {
     private int lignoRadiuso = 12; // 0o14
     private int solecaTikoj = 1200; // 0o2260
     private double solaVido = 16.0D;
+    private double solaLudantoVido = 64.0D;
+    private int embuskoTikoj = 100; // 0o144
     private double samideanoVido = 32.0D;
     private double grupRadiuso = 48.0D;
     private int vilaMinimo = 2; // 0o2
@@ -42,6 +44,8 @@ public class Agordo {
         lignoRadiuso = Math.max(4, kromprogramo.getConfig().getInt("ligno-radiuso", lignoRadiuso));
         solecaTikoj = Math.max(100, kromprogramo.getConfig().getInt("soleca-tikoj", solecaTikoj));
         solaVido = Math.max(4.0D, kromprogramo.getConfig().getDouble("sola-vido", solaVido));
+        solaLudantoVido = Math.max(16.0D, kromprogramo.getConfig().getDouble("sola-ludanto-vido", solaLudantoVido));
+        embuskoTikoj = Math.max(20, kromprogramo.getConfig().getInt("embusko-tikoj", embuskoTikoj));
         samideanoVido = Math.max(8.0D, kromprogramo.getConfig().getDouble("samideano-vido", samideanoVido));
         grupRadiuso = Math.max(16.0D, kromprogramo.getConfig().getDouble("grup-radiuso", grupRadiuso));
         vilaMinimo = Math.max(2, kromprogramo.getConfig().getInt("vila-minimo", vilaMinimo));
@@ -89,6 +93,18 @@ public class Agordo {
         @returns ចម្ងាយមើលឃើញ */
     public double solaVido() {
         return solaVido;
+    }
+
+    /* ទទួលកាំដែលគ្មានអ្នកលេងផ្សេងសម្រាប់សត្វព្រៃ
+        @returns កាំឃ្លាត */
+    public double solaLudantoVido() {
+        return solaLudantoVido;
+    }
+
+    /* ទទួលពេលលាក់ខ្លួនក្នុងធីកមុនវាយប្រហារ
+        @returns ពេលលាក់ខ្លួន */
+    public int embuskoTikoj() {
+        return embuskoTikoj;
     }
 
     /* ទទួលចម្ងាយមើលឃើញ Hantami ផ្សេង
